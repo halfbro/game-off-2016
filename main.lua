@@ -1,4 +1,4 @@
-Scenes = require 'maploader'
+Map = require 'maploader'
 Sprites = require 'spritesheets'
 TestGameunit = require 'gameunit'
 
@@ -34,7 +34,7 @@ function love.draw()
     -- end
   -- end
 
-  Scenes.firstmap:draw()
+  Map.firstmap:draw()
   test:draw()
 end
 

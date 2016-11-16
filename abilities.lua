@@ -1,30 +1,74 @@
 Abilities = {}
 
+------------------------ Effect functions ------------------------
+
 local function damage(val)
-  return function(unit)
-    for val=1,(val-unit.defense) do
-      unit.nodes.remove_back()
+  return function(source, target)
+    for i=1,(val-target.defense) do
+      target.nodes:remove_back()
     end
   end
 end
 
 local function slow(val)
-  return function(unit)
-    unit.maxmoves = math.max(unit.maxmoves-val,0)
-  end
-end
-
-local function grow(val)
-  return function(unit)
-    unit.maxsize = unit.maxsize+val
+  return function(source, target)
+    target.maxmoves = math.max(target.maxmoves-val,0)
   end
 end
 
 local function quicken(val)
-  return function(unit)
-    unit.maxmoves = unit.maxmoves+val
+  return function(source, target)
+    target.maxmoves = target.maxmoves+val
   end
 end
+
+local function grow(val)
+  return function(source, target)
+    target.maxsize = target.maxsize+val
+  end
+end
+
+local function selfdamage(val)
+  return function(source, target)
+    for i=1,val do
+      source.nodes:remove_back()
+    end
+  end
+end
+
+local function charge(val)
+  return function(source, target)
+    if source.charge then
+      source.charge = source.charge+val
+    else
+      source.charge = val
+    end
+  end
+end
+
+local function chargedability(ability, val)
+  return function(source, target)
+    if not source.charge then source.charge=0 return ability(0)(source,target) end
+    local power = source.charge
+    source.charge=0
+    return ability(power*val)(source, target)
+  end
+end
+
+------------------------ Pre-Req functions ------------------------
+
+local function chargeatleast(val)
+  return function(source, target)
+    if source.charge then
+      return source.charge >= val
+    else
+      source.charge=0
+      return false
+    end
+  end
+end
+
+------------------------ Ability tables ------------------------
 
 Abilities.Ayy = {
   name = "Ayy",
@@ -68,6 +112,31 @@ Abilities.Grow = {
   range = 2,
   effects = {
     grow(2)
+  }
+}
+
+Abilities.Charge = {
+  name = "Charge",
+  desc = "Soon (tm)",
+  effectstr = "Increases charge by 1",
+  affects = 0,
+  range = 0,
+  effects = {
+    charge(1)
+  }
+}
+
+Abilities.Laser = {
+  name = "Laser",
+  desc = "Have you loaded the Bass Cannon?",
+  effectstr = "Damages for 2x charge amount",
+  affects = 1,
+  range = 3,
+  effects = {
+    chargedability(damage, 2)
+  },
+  prereqs = {
+    chargeatleast(1)
   }
 }
 
