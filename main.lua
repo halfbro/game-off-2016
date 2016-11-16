@@ -1,4 +1,4 @@
-Map = require 'maploader'
+MapLoader = require 'maploader'
 Sprites = require 'spritesheets'
 TestGameunit = require 'gameunit'
 
@@ -27,14 +27,7 @@ function love.load()
 end
 
 function love.draw()
-  -- for i=320,1152,64 do
-    -- for j=41,679,64 do
-      -- love.graphics.draw(tiles.tilespritesheet, tiles.redtile, i, j)
-      -- love.graphics.draw(tiles.tilespritesheet, tiles.grounddecor2, i, j)
-    -- end
-  -- end
-
-  Map.firstmap:draw()
+  --Map.firstmap:draw()
   test:draw()
 end
 

@@ -1,9 +1,16 @@
-local Sprites = require "spritesheets"
-local TestGameunit = require "gameunit"
-local TestNode = require "node"
+local MapLoader = {}
 
-local Map = {}
+local loaded = {}
 
+function MapLoader.load(filename)
+  if not loaded[filename] then
+    loaded[filename] = require("maps/"..filename)
+  end
+
+  return loaded[filename].load()
+end
+
+--[[
 for i=1,14 do
   Map[i] = {}
   for j=1,10 do
@@ -33,13 +40,6 @@ function Map:draw()
     end
   end
 end
+]]
 
-local map1 = Map:new()
-
-function love.keypressed(_, sc, __)
-  test:move(sc);
-end
-
-return {
-  firstmap = map1,
-}
+return MapLoader
