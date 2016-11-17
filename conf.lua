@@ -1,5 +1,4 @@
 function love.conf(t)
-  t.identity = saves
   t.version = "0.10.2"
 
   t.window.width = 1280

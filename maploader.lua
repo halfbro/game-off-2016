@@ -1,45 +1,50 @@
 local MapLoader = {}
 
-local loaded = {}
+local Map = {{}}
 
-function MapLoader.load(filename)
-  if not loaded[filename] then
-    loaded[filename] = require("maps/"..filename)
-  end
-
-  return loaded[filename].load()
-end
-
---[[
-for i=1,14 do
-  Map[i] = {}
-  for j=1,10 do
-    Map[i][j] = {basetile=0}
-  end
-end
-
-function Map:new()
-  m = {{}}
-  setmetatable(m, self)
-  self.__index = self
-  return m
-end
-
-function Map:draw()
+function Map:draw() 
   for i=1,14 do
-    for j=1,10 do
-      if Map[i][j].basetile == 0 then
-        love.graphics.draw(Sprites.tilespritesheet, Sprites.groundnormal, 320+(i-1)*64, 41+(j-1)*64)
-      elseif Map[i][j].basetile == 1 then
-        love.graphics.draw(Sprites.tilespritesheet, Sprites.grounddecor1, 320+(i-1)*64, 41+(j-1)*64)
-      elseif Map[i][j].basetile == 2 then
-        love.graphics.draw(Sprites.tilespritesheet, Sprites.grounddecor2, 320+(i-1)*64, 41+(j-1)*64)
-      elseif Map[i][j].basetile == 3 then
-        love.graphics.draw(Sprites.tilespritesheet, Sprites.grounddecor3, 320+(i-1)*64, 41+(j-1)*64)
+    if self[i] then
+      for j=1,10 do
+        if self[i][j] then
+          if self[i][j].basetile == 0 then
+            love.graphics.draw(Sprites.tilespritesheet, Sprites.groundnormal, 320+(i-1)*64, 41+(j-1)*64)
+          elseif self[i][j].basetile == 1 then
+            love.graphics.draw(Sprites.tilespritesheet, Sprites.grounddecor1, 320+(i-1)*64, 41+(j-1)*64)
+          elseif self[i][j].basetile == 2 then
+            love.graphics.draw(Sprites.tilespritesheet, Sprites.grounddecor2, 320+(i-1)*64, 41+(j-1)*64)
+          elseif self[i][j].basetile == 3 then
+            love.graphics.draw(Sprites.tilespritesheet, Sprites.grounddecor3, 320+(i-1)*64, 41+(j-1)*64)
+          end
+        end
       end
     end
   end
 end
-]]
+
+local loaded = {}
+
+function MapLoader.load(filename)
+  if not loaded[filename] then
+    print("Loading file maps/"..filename.."...")
+
+    local ok, module = pcall(require, "maps/"..filename)
+    if ok then
+      loaded[filename] = module
+      print("Load Successful")
+    else
+      loaded[filename] = nil
+      print("Load Failed: \n--- BEGIN ERROR MESSAGE ---\n"..module..")\n----- END ERROR MESSAGE -----")
+    end
+
+  end
+
+  local newmapdata = loaded[filename].load()
+
+  setmetatable(newmapdata.map, Map)
+  Map.__index = Map
+
+  return newmapdata.map, newmapdata.units
+end
 
 return MapLoader

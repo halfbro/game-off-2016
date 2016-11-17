@@ -1,4 +1,4 @@
-Abilities = {}
+local Abilities = {}
 
 ------------------------ Effect functions ------------------------
 
@@ -57,6 +57,12 @@ end
 
 ------------------------ Pre-Req functions ------------------------
 
+local function sizeatleast(val)
+  return function(source, target)
+    return source.nodes.size >= val
+  end
+end
+
 local function chargeatleast(val)
   return function(source, target)
     if source.charge then
@@ -78,6 +84,20 @@ Abilities.Ayy = {
   range = 1,
   effects = {
     damage(2)
+  }
+}
+
+Abilities.Lmao = {
+  name = "Lmao",
+  desc = "Can't just let it hang there",
+  effectstr = "Damages for 3",
+  affects = 1,
+  range = 1,
+  effects = {
+    damage(3)
+  },
+  prereqs = {
+    sizeatleast(3)
   }
 }
 

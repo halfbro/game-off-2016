@@ -1,16 +1,23 @@
-local Map1 = {}
+local Units = require "units"
 
-for i=1,14 do
-  Map1[i] = {}
-  for j=1,10 do
-    Map1[i][j] = {basetile=0}
-  end
-end
 
 local function load()
   t = {}
-  setmetatable(t,Map1)
-  Map1.__index = Map1
+
+  t.map = {}
+  for i=3,12 do
+    t.map[i] = {}
+    for j=2,9 do
+      t.map[i][j] = {basetile=0}
+    end
+  end
+
+  t.units = List:new()
+
+  t.units:insert_back(Units.ayylmao:new(5,4))
+  t.units:insert_back(Units.ayylmao:new(6,6))
+  t.units:insert_back(Units.ayylmao:new(5,7))
+
   return t
 end
 

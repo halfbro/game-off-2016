@@ -110,5 +110,18 @@ function LinkedList:find(value)
   return nil
 end
   
+function LinkedList:iter()
+  local node = self.head
+
+  return function()
+    if node then
+      local ret = node
+      node = node.prev
+      return ret
+    else
+      return nil
+    end
+  end
+end
 
 return LinkedList
