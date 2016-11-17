@@ -18,12 +18,12 @@ AyyLmao.tileset = Sprites.bluetile
 function AyyLmao:new(mapx, mapy)
   local g = {}
   g.maxmoves = 2
-  g.movesleft = 0
+  g.movesleft = 2
   g.defense = 0
   g.maxsize = 4
 
   g.selected = false
-  g.hasmoved = true
+  g.hasacted = false
 
   g.mapx = mapx
   g.mapy = mapy

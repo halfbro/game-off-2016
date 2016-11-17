@@ -1,24 +1,23 @@
 local Units = require "units"
 
-
 local function load()
-  t = {}
+  Map1Data = {}
 
-  t.map = {}
+  Map1Data.map = {}
   for i=3,12 do
-    t.map[i] = {}
+    Map1Data.map[i] = {}
     for j=2,9 do
-      t.map[i][j] = {basetile=0}
+      Map1Data.map[i][j] = {basetile=0}
     end
   end
 
-  t.units = List:new()
+  Map1Data.units = List:new()
 
-  t.units:insert_back(Units.ayylmao:new(5,4))
-  t.units:insert_back(Units.ayylmao:new(6,6))
-  t.units:insert_back(Units.ayylmao:new(5,7))
+  Map1Data.units:insert_back(Units.ayylmao:new(5,4))
+  Map1Data.units:insert_back(Units.ayylmao:new(6,6))
+  Map1Data.units:insert_back(Units.ayylmao:new(5,7))
 
-  return t
+  return Map1Data
 end
 
 return {

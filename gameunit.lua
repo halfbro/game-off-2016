@@ -20,7 +20,7 @@ Gameunit.mapx = 0
 Gameunit.mapy = 0
 
 Gameunit.selected = false   -- Boolean representing if the unit is selected
-Gameunit.hasmoved = true    -- Boolean representing if the unit has finished moving or not
+Gameunit.hasacted = true    -- Boolean representing if the unit has finished moving or not
 
 Gameunit.nodes = nil       -- List of the unit's nodes
 
@@ -61,6 +61,10 @@ function Gameunit:draw()
   end
   
   love.graphics.draw(Sprites.tilespritesheet, self.sprite, 320+(self.mapx-1)*64, 41+(self.mapy-1)*64)
+
+  if not self.hasacted then
+    love.graphics.draw(Sprites.tilespritesheet, Sprites.finishedindicator, 340+(self.mapx-1)*64, 11+(self.mapy-1)*64)
+  end
 end
 
 function Gameunit:updateconnections()
@@ -92,6 +96,8 @@ function Gameunit:move(direction)
   elseif direction == "left" then
     self.mapx = self.mapx - 1
   end
+
+  self.movesleft = self.movesleft - 1
 
   for node in self.nodes:iter() do
     if node.val.x == self.mapx and node.val.y == self.mapy then

@@ -22,4 +22,14 @@ function love.keyreleased(key)
   end
 end
 
+function love.mousepressed(x, y, button, istouch)
+  scenehandle:handlemousepress(x,y)
+end
+
+function love.mousereleased(x, y, button, istouch)
+end
+
+function love.mousemoved(x, y, dx, dy, istouch)
+end
+
 return InputHandler
