@@ -43,8 +43,11 @@ local spriteayy = love.graphics.newQuad(64*0, 64*2, 64, 64, tilespritesheet:getD
 
 local attackreticle = love.graphics.newQuad(64*0, 64*7, 64,64, tilespritesheet:getDimensions())
 local movereticle = love.graphics.newQuad(64*1, 64*7, 64,64, tilespritesheet:getDimensions())
+local selector = love.graphics.newQuad(64*6, 64*7, 64, 64, tilespritesheet:getDimensions())
 
 local finishedindicator = love.graphics.newQuad(64*2, 64*7, 64,64, tilespritesheet:getDimensions())
+
+local entrypoint = love.graphics.newQuad(64*7, 64*7, 64, 64, tilespritesheet:getDimensions())
 
 local groundnormalquad = love.graphics.newQuad(64*8,64*7,64,64, tilespritesheet:getDimensions())
 local grounddecor1quad = love.graphics.newQuad(64*9,64*7,64,64, tilespritesheet:getDimensions())
@@ -53,6 +56,7 @@ local grounddecor3quad = love.graphics.newQuad(64*11,64*7,64,64, tilespritesheet
 
 return {
   tilespritesheet = tilespritesheet,
+
   redtile = {tile=redunitquad, hconn=redhconn, vconn=redvconn},
   orangetile = {tile=orangeunitquad, hconn=orangehconn, vconn=orangevconn},
   yellowtile = {tile=yellowunitquad, hconn=yellowhconn, vconn=yellowvconn},
@@ -65,10 +69,17 @@ return {
   whitetile = {tile=whiteunitquad, hconn=whitehconn, vconn=whitevconn},
   lightgraytile = {tile=lightgrayunitquad, hconn=lightgrayhconn, vconn=lightgrayvconn},
   graytile = {tile=grayunitquad, hconn=grayhconn, vconn=grayvconn},
+
   ayy = spriteayy,
+
   attackreticle = attackreticle,
   movereticle = movereticle,
+  selector = selector,
+
   finishedindicator = finishedindicator,
+
+  entrypoint = entrypoint,
+
   groundnormal = groundnormalquad,
   grounddecor1 = grounddecor1quad,
   grounddecor2 = grounddecor2quad,

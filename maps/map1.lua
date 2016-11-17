@@ -4,9 +4,9 @@ local function load()
   Map1Data = {}
 
   Map1Data.map = {}
-  for i=3,12 do
+  for i=1,14 do
     Map1Data.map[i] = {}
-    for j=2,9 do
+    for j=1,10 do
       Map1Data.map[i][j] = {basetile=0}
     end
   end
@@ -16,6 +16,11 @@ local function load()
   Map1Data.units:insert_back(Units.ayylmao:new(5,4))
   Map1Data.units:insert_back(Units.ayylmao:new(6,6))
   Map1Data.units:insert_back(Units.ayylmao:new(5,7))
+
+  Map1Data.entrypoints = {
+    {x=5, y=4},
+    {x=5, y=7},
+  }
 
   return Map1Data
 end

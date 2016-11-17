@@ -78,8 +78,15 @@ function Scene:handlemousepress(x, y)
   end
 
   if unitclicked then
+    if self.selected then
+      self.selected.selected = false
+    end
     self.selected = unitclicked
+    unitclicked.selected = true
   else
+    if self.selected then
+      self.selected.selected = false
+    end
     self.selected = nil
   end
 end
@@ -87,7 +94,7 @@ end
 function SceneLoader.loadscene(filename)
   local scene = {}
   scene.name = filename
-  scene.map, scene.units = MapLoader.load(filename)
+  scene.map, scene.units, scene.entrypoints = MapLoader.load(filename)
   scene.selected = nil
   scene.animating = false
   scene.actionstaken = List:new() -- Start focusing on this

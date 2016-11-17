@@ -62,6 +62,10 @@ function Gameunit:draw()
   
   love.graphics.draw(Sprites.tilespritesheet, self.sprite, 320+(self.mapx-1)*64, 41+(self.mapy-1)*64)
 
+  if self.selected then
+    love.graphics.draw(Sprites.tilespritesheet, Sprites.selector, 320+(self.mapx-1)*64, 41+(self.mapy-1)*64)
+  end
+  
   if not self.hasacted then
     love.graphics.draw(Sprites.tilespritesheet, Sprites.finishedindicator, 340+(self.mapx-1)*64, 11+(self.mapy-1)*64)
   end
