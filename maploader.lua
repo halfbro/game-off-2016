@@ -1,6 +1,18 @@
 local MapLoader = {}
 
+local Sprites = require 'spritesheets'
 local Map = {{}}
+
+function Map:drawentrypoints(p)
+  for _,v in pairs(p) do
+    if v.unit then
+      love.graphics.draw(Sprites.tilespritesheet, v.unit.tileset.tile, 320+(v.x-1)*64, 41+(v.y-1)*64)
+      love.graphics.draw(Sprites.tilespritesheet, v.unit.sprite, 320+(v.x-1)*64, 41+(v.y-1)*64)
+    else
+      love.graphics.draw(Sprites.tilespritesheet, Sprites.entrypoint, 320+(v.x-1)*64, 41+(v.y-1)*64)
+    end
+  end
+end
 
 function Map:draw() 
   for i=1,14 do
@@ -44,7 +56,7 @@ function MapLoader.load(filename)
   setmetatable(newmapdata.map, Map)
   Map.__index = Map
 
-  return newmapdata.map, newmapdata.units
+  return newmapdata.map, newmapdata.units, newmapdata.entrypoints
 end
 
 return MapLoader

@@ -62,4 +62,39 @@ function Actions.moveunit(unit, direction, scene)
   return true, actiondescriptor
 end
 
+function Actions.attack(source, target, ability)
+  if source.hasacted then return false end
+  local oldvals = {}
+  oldvals.targetnodes = List:new()
+  for node in target.nodes:iter() do
+    oldvals.targetnodes:insert_back({ x=node.val.x,
+                                y=node.val.y,
+                                connections={
+                                  up=node.val.connections.up,
+                                  right=node.val.connections.right,
+                                  down=node.val.connections.down,
+                                  left=node.val.connections.left
+                                }
+                              })
+  end
+
+  for _,effect in pairs(ability.effects) do
+    effect(source,target)
+  end
+
+  source.hasacted = true
+  
+  local actiondescriptor = {
+    s = source,
+    t = target,
+    a = ability,
+    undo = function()
+      source.hasacted = false
+      target.nodes = oldvals.targetnodes
+    end
+  }
+
+  return true, actiondescriptor
+end
+
 return Actions

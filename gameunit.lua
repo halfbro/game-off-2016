@@ -35,6 +35,8 @@ function Gameunit:new()
 end
 
 function Gameunit:draw()
+  if self.nodes.size == 0 then return end
+
   local sorted = List:new()
 
   self:updateconnections() -- Potential cause of fps issues

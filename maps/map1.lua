@@ -1,7 +1,7 @@
 local Units = require "units"
 
 local function load()
-  Map1Data = {}
+  local Map1Data = {}
 
   Map1Data.map = {}
   for i=1,14 do
@@ -13,13 +13,15 @@ local function load()
 
   Map1Data.units = List:new()
 
-  Map1Data.units:insert_back(Units.ayylmao:new(9,4))
-  Map1Data.units:insert_back(Units.ayylmao:new(8,6))
-  Map1Data.units:insert_back(Units.ayylmao:new(9,7))
-
   Map1Data.entrypoints = {
     {x=5, y=4},
+    {x=5, y=5},
+    {x=5, y=6},
     {x=5, y=7},
+    {x=10, y=4},
+    {x=10, y=5},
+    {x=10, y=6},
+    {x=10, y=7},
   }
 
   return Map1Data

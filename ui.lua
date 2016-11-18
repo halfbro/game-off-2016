@@ -122,18 +122,20 @@ UnitPanel = UIElement:new()
 function UnitPanel:draw(unit)
   love.graphics.draw(UI.uisheet, UI.unitbg, 0, 64*4)
   love.graphics.push()
-  love.graphics.transform(32,64*4+32)
+  love.graphics.translate(32,64*4+32)
   love.graphics.draw(Sprites.tilespritesheet, unit.tileset.tile, 16, 16)
   love.graphics.draw(Sprites.tilespritesheet, unit.sprite, 16, 16)
   love.graphics.print(unit.name, 96, 30)
   love.graphics.print(unit.desc, 96, 42)
-  for ability in unit.abilities:iter() do
-    love.graphics.print(ability.val.name, 16, 72)
-    love.graphics.print(ability.val.desc, 16, 84)
-    love.graphics.print(ability.val.effectstr, 16, 96)
-    love.graphics.print(ability.val.effectstr, 16, 96)
-    love.graphics.print("Range: "..ability.val.range, 16, 96)
+  local displacement = 8
+  for _,ability in pairs(unit.abilities) do
+    love.graphics.print(ability.name, 16, 72+displacement)
+    love.graphics.print(ability.desc, 16, 84+displacement)
+    love.graphics.print(ability.effectstr, 16, 96+displacement)
+    love.graphics.print("Range: "..ability.range, 16, 108+displacement)
+    displacement = 70
   end
+  love.graphics.pop()
 end
 
 
@@ -181,6 +183,16 @@ end
 
 function UI:gettrayunit()
   return Tray.currunit
+end
+
+function UI:drawattackrange(x, y, range)
+  for i = -1*range,range do
+    for j = -1*range,range do
+      if (math.abs(i+j) <= range and math.abs(i+j)>0 and range>0) or range == 0 then
+        love.graphics.draw(Sprites.tilespritesheet, Sprites.attackreticle, 320+(x+i-1)*64, 41+(y+j-1)*64)
+      end
+    end
+  end
 end
 
 return UI
