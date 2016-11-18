@@ -8,6 +8,18 @@ local UI = require 'ui'
 local Scene = {}
 local currentscene = {}
 
+function Scene.nextturn()
+  currentscene.turn = currentscene.turn + 1
+  for u in currentscene.units:iter() do
+    u.val.movesleft = u.val.maxmoves
+    u.val.hasacted = false
+  end
+  currentscene.actionstaken = List:new()
+
+  --AI.move(currentscene)
+
+end
+
 function Scene:draw()
   -- s.background:draw()
   if self.map then self.map:draw() end
@@ -33,6 +45,11 @@ function SceneLoader.handlekeypress(key)
   end
 
   if animating then return end
+
+  if key == "space" then
+    Scene.nextturn()
+    return
+  end
 
   local success, actiondesc
   if key=="ctrl+z" then
@@ -64,7 +81,6 @@ function SceneLoader.handlekeypress(key)
 end
 
 function SceneLoader.handlemousemove(x, y, dx, dy)
-  
 end
 
 function SceneLoader.handlewheelmove(dy)
@@ -96,13 +112,16 @@ function SceneLoader.handlemousepress(x, y)
     end
     currentscene.selected = unitclicked
     unitclicked.selected = true
-    --UI:showunit(unitclicked)
+    if currentscene.turn > 0 then UI:showunit(unitclicked) end
   else
     if currentscene.selected then
       currentscene.selected.selected = false
     end
     currentscene.selected = nil
-    --UI:clear()
+  end
+
+  if not UI:handlemousepress(x, y) and currentscene.turn > 0 then
+    UI:clear()
   end
 end
 

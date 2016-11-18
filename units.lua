@@ -23,7 +23,7 @@ function AyyLmao:new(mapx, mapy)
   g.maxsize = 4
 
   g.selected = false
-  g.hasacted = true
+  g.hasacted = false
 
   g.mapx = mapx
   g.mapy = mapy

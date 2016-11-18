@@ -8,6 +8,7 @@ UI.uisheet = love.graphics.newImage("assets/UI.png")
 
 UI.mainbg = love.graphics.newQuad(64*0, 64*0, 64*5, 16+64*11, UI.uisheet:getDimensions())
 UI.traybg = love.graphics.newQuad(64*5, 64*0, 64*5, 16+64*6, UI.uisheet:getDimensions())
+UI.unitbg = love.graphics.newQuad(64*10, 64*0, 64*5, 16+64*6, UI.uisheet:getDimensions())
 
 UI.static = love.graphics.newCanvas(320,720)
 
@@ -44,7 +45,7 @@ function TrayElement:draw(y)
   if self.selected then
     local r,g,b,a = love.graphics.getColor()
     love.graphics.setColor(255, 69, 0, 255)
-    love.graphics.rectangle("fill", 2, 0, 254, 96)
+    love.graphics.rectangle("fill", 2, y, 254, 96)
     love.graphics.setColor(r,g,b,a)
   end
   love.graphics.draw(Sprites.tilespritesheet, self.unit.tileset.tile, 16, 16+y)
@@ -65,6 +66,7 @@ end
 Tray = UIElement:new()
 Tray.yposition = 0
 Tray.maxy = 0
+Tray.currunit = nil
 Tray.trayitems = List:new()
 Tray.trayitems:insert_back(TrayElement:new(Units.ayylmao))
 
@@ -73,7 +75,7 @@ function Tray:draw()
 
   love.graphics.push()
   love.graphics.translate(32,32)
-  love.graphics.setScissor(32, 32, 64*3, 64*5+32)
+  love.graphics.setScissor(32, 32, 64*5, 64*5+32)
 
   local nexty = 0
   for element in self.trayitems:iter() do
@@ -94,7 +96,44 @@ function Tray:handlemousescroll(dy)
 end
 
 function Tray:handlemousepress(x, y)
+  if x>34 and x<320 then
+    if y>32 and y<352 then
+      y = y-32
+      for panel in self.trayitems:iter() do
+        if y-self.yposition>0 and y-self.yposition<96 then
+          panel.val.selected=true
+          Tray.currunit = panel.val.unit
+          return true
+        else
+          panel.val.selected=false
+          y=y-96
+        end
+      end
+      Tray.currunit = nil
+    end
+  end
+  return false
+end
 
+---------- Unit Panel
+
+UnitPanel = UIElement:new()
+
+function UnitPanel:draw(unit)
+  love.graphics.draw(UI.uisheet, UI.unitbg, 0, 64*4)
+  love.graphics.push()
+  love.graphics.transform(32,64*4+32)
+  love.graphics.draw(Sprites.tilespritesheet, unit.tileset.tile, 16, 16)
+  love.graphics.draw(Sprites.tilespritesheet, unit.sprite, 16, 16)
+  love.graphics.print(unit.name, 96, 30)
+  love.graphics.print(unit.desc, 96, 42)
+  for ability in unit.abilities:iter() do
+    love.graphics.print(ability.val.name, 16, 72)
+    love.graphics.print(ability.val.desc, 16, 84)
+    love.graphics.print(ability.val.effectstr, 16, 96)
+    love.graphics.print(ability.val.effectstr, 16, 96)
+    love.graphics.print("Range: "..ability.val.range, 16, 96)
+  end
 end
 
 
@@ -109,8 +148,13 @@ function UI:draw()
   end)
 
   love.graphics.draw(self.static, 0, 0)
+
   if self.mode == "tray" then
     Tray:draw()
+  elseif self.mode == "unit" then
+    UnitPanel:draw(self.currunit)
+  elseif self.mode == "blank" then
+
   end
 end
 
@@ -123,12 +167,20 @@ function UI:showunit(unit)
   self.currunit = unit
 end
 
-function UI:showblank()
+function UI:clear()
   self.mode = "blank"
 end
 
 function UI:handlemousescroll(dy)
   Tray:handlemousescroll(8*dy)
+end
+
+function UI:handlemousepress(x, y)
+  return Tray:handlemousepress(x, y)
+end
+
+function UI:gettrayunit()
+  return Tray.currunit
 end
 
 return UI
