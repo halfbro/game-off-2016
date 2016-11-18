@@ -13,9 +13,9 @@ local function load()
 
   Map1Data.units = List:new()
 
-  Map1Data.units:insert_back(Units.ayylmao:new(5,4))
-  Map1Data.units:insert_back(Units.ayylmao:new(6,6))
-  Map1Data.units:insert_back(Units.ayylmao:new(5,7))
+  Map1Data.units:insert_back(Units.ayylmao:new(9,4))
+  Map1Data.units:insert_back(Units.ayylmao:new(8,6))
+  Map1Data.units:insert_back(Units.ayylmao:new(9,7))
 
   Map1Data.entrypoints = {
     {x=5, y=4},

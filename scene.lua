@@ -2,10 +2,11 @@ local SceneLoader = {}
 
 local MapLoader = require 'maploader'
 local Actions = require 'actions'
-local InputHandler = require 'input'
 local List = require 'lib/linkedlist'
+local UI = require 'ui'
 
 local Scene = {}
+local currentscene = {}
 
 function Scene:draw()
   -- s.background:draw()
@@ -15,8 +16,7 @@ function Scene:draw()
       it.val:draw()
     end
   end
-  -- s.ui.draw()
-  -- etc etc
+  if UI then UI:draw() end
 end
 
 function Scene:update(dt)
@@ -26,41 +26,54 @@ function Scene:update(dt)
   -- s.ui.update(dt)
 end
 
-function Scene:handlekeypress(key)
+function SceneLoader.handlekeypress(key)
+  if key == "ctrl+1" then
+    SceneLoader.loadscene("map1")
+    return
+  end
+
   if animating then return end
 
   local success, actiondesc
   if key=="ctrl+z" then
-    if self.actionstaken.head then
-      self.actionstaken.tail.val.undo()
-      self.actionstaken:remove_back()
+    if currentscene.actionstaken.head then
+      currentscene.actionstaken.tail.val.undo()
+      currentscene.actionstaken:remove_back()
     end
   elseif key=="up" then
-    if self.selected then
-      success, actiondesc = Actions.moveunit(self.selected, "up", self)
+    if currentscene.selected then
+      success, actiondesc = Actions.moveunit(currentscene.selected, "up", currentscene)
     end
   elseif key=="right" then
-    if self.selected then
-      success, actiondesc = Actions.moveunit(self.selected, "right", self)
+    if currentscene.selected then
+      success, actiondesc = Actions.moveunit(currentscene.selected, "right", currentscene)
     end
   elseif key=="down" then
-    if self.selected then
-      success, actiondesc = Actions.moveunit(self.selected, "down", self)
+    if currentscene.selected then
+      success, actiondesc = Actions.moveunit(currentscene.selected, "down", currentscene)
     end
   elseif key=="left" then
-    if self.selected then
-      success, actiondesc = Actions.moveunit(self.selected, "left", self)
+    if currentscene.selected then
+      success, actiondesc = Actions.moveunit(currentscene.selected, "left", currentscene)
     end
   end
 
   if success then
-    self.actionstaken:insert_back(actiondesc)
+    currentscene.actionstaken:insert_back(actiondesc)
   end
 end
 
-function Scene:handlemousepress(x, y)
+function SceneLoader.handlemousemove(x, y, dx, dy)
+  
+end
+
+function SceneLoader.handlewheelmove(dy)
+  UI:handlemousescroll(dy)
+end
+
+function SceneLoader.handlemousepress(x, y)
   local unitclicked = nil
-  for unit in self.units:iter() do
+  for unit in currentscene.units:iter() do
     for node in unit.val.nodes:iter() do
       local lbx, ubx, lby, uby
       lbx = 320+(node.val.x-1)*64
@@ -78,32 +91,43 @@ function Scene:handlemousepress(x, y)
   end
 
   if unitclicked then
-    if self.selected then
-      self.selected.selected = false
+    if currentscene.selected then
+      currentscene.selected.selected = false
     end
-    self.selected = unitclicked
+    currentscene.selected = unitclicked
     unitclicked.selected = true
+    --UI:showunit(unitclicked)
   else
-    if self.selected then
-      self.selected.selected = false
+    if currentscene.selected then
+      currentscene.selected.selected = false
     end
-    self.selected = nil
+    currentscene.selected = nil
+    --UI:clear()
   end
 end
 
-function SceneLoader.loadscene(filename)
-  local scene = {}
-  scene.name = filename
-  scene.map, scene.units, scene.entrypoints = MapLoader.load(filename)
-  scene.selected = nil
-  scene.animating = false
-  scene.actionstaken = List:new() -- Start focusing on this
+function SceneLoader.draw()
+  currentscene:draw()
+end
 
-  setmetatable(scene, Scene)
+function SceneLoader.update(dt)
+  currentscene:update(dt)
+end
+
+
+function SceneLoader.loadscene(filename)
+  currentscene = {}
+  currentscene.name = filename
+  currentscene.map, currentscene.units, currentscene.entrypoints = MapLoader.load(filename)
+  currentscene.selected = nil
+  currentscene.animating = false
+  currentscene.actionstaken = List:new() -- Start focusing on this
+  currentscene.turn = 0
+
+  setmetatable(currentscene, Scene)
   Scene.__index = Scene
 
-  InputHandler.updatescene(scene)
-  return scene
+  return currentscene
 end
 
 return SceneLoader

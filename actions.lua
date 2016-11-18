@@ -10,15 +10,19 @@ function Actions.moveunit(unit, direction, scene)
     if unit ~= other.val then
       for node in other.val.nodes:iter() do
         if direction == "up" then
+          if not scene.map[unit.mapx] or not scene.map[unit.mapx][unit.mapy-1] then return false end
           if scene.map[other.val.mapx][other.val.mapy-1].basetile < 0 then return false end
           if node.val.x == unit.mapx and node.val.y == unit.mapy - 1 then return false end
         elseif direction == "down" then
+          if not scene.map[unit.mapx] or not scene.map[unit.mapx][unit.mapy+1] then return false end
           if scene.map[other.val.mapx][other.val.mapy+1].basetile < 0 then return false end
           if node.val.x == unit.mapx and node.val.y == unit.mapy + 1 then return false end
         elseif direction == "right" then
+          if not scene.map[unit.mapx+1] or not scene.map[unit.mapx+1][unit.mapy] then return false end
           if scene.map[other.val.mapx+1][other.val.mapy].basetile < 0 then return false end
           if node.val.x == unit.mapx + 1 and node.val.y == unit.mapy then return false end
         elseif direction == "left" then
+          if not scene.map[unit.mapx-1] or not scene.map[unit.mapx-1][unit.mapy] then return false end
           if scene.map[other.val.mapx-1][other.val.mapy].basetile < 0 then return false end
           if node.val.x == unit.mapx - 1 and node.val.y == unit.mapy then return false end
         end

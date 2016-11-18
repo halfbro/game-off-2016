@@ -5,7 +5,7 @@ local List = require 'lib/linkedlist'
 
 local AyyLmao = Gameunit:new()
 AyyLmao.name = "AyyLmao"
-AyyLmao.desc = "Drown them in memes"
+AyyLmao.desc = "Drowns them in memes"
 AyyLmao.powerlevel = 1
 AyyLmao.alignment = 1
 AyyLmao.abilities = {
@@ -23,7 +23,7 @@ function AyyLmao:new(mapx, mapy)
   g.maxsize = 4
 
   g.selected = false
-  g.hasacted = false
+  g.hasacted = true
 
   g.mapx = mapx
   g.mapy = mapy

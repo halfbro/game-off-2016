@@ -1,19 +1,17 @@
 local InputHandler = {}
 
+local SceneLoader = require 'scene'
+
 local scenehandle = {}
 local ctrl = false
-
-function InputHandler.updatescene(scene)
-  scenehandle = scene
-end
 
 function love.keypressed(key, sc, isrepeat)
   if key == "lctrl" or key == "rctrl" then
     ctrl=true
   end
-  
   if ctrl then key = "ctrl+"..key end
-  scenehandle:handlekeypress(key)
+
+  SceneLoader.handlekeypress(key)
 end
 
 function love.keyreleased(key)
@@ -23,13 +21,18 @@ function love.keyreleased(key)
 end
 
 function love.mousepressed(x, y, button, istouch)
-  scenehandle:handlemousepress(x,y)
+  SceneLoader.handlemousepress(x,y)
 end
 
 function love.mousereleased(x, y, button, istouch)
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
+  SceneLoader.handlemousemove(x, y, dx, dy)
+end
+
+function love.wheelmoved(x, y)
+  SceneLoader.handlewheelmove(y)
 end
 
 return InputHandler
